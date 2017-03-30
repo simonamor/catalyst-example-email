@@ -1,0 +1,11 @@
+{
+    "renderer": "TT",
+    "header": [
+        { "From": "Simon <simon@example.com>" },
+        { "Subject": "Test form submission" }
+    ],
+    "alternatives": [
+        { "type": "text/plain", "path": "body.txt" },
+        { "type": "text/html", "path": "body.html" }
+    ]
+}
