@@ -69,6 +69,7 @@ EOF
         );
         my $msg = $kit->assemble({
             yourname => $name,
+            destination_email => $email,
         });
 
         my $transport = $c->config->{ email_transport }->new();
