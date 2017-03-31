@@ -39,7 +39,9 @@ object that hasn't already been referenced.
 # One instance per $c->model() request
 sub ACCEPT_CONTEXT {
     my ($self, $c, @args) = @_;
-    return Sendme::Email->new( @args );
+    return Sendme::Email->new(
+        { template_path => $c->path_to('templates')->stringify },
+        @args );
 }
 
 sub AUTOLOAD {
