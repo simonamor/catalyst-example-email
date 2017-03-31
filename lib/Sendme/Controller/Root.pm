@@ -83,6 +83,58 @@ EOF
     $c->response->body($html);
 }
 
+=head2 sendmodel
+
+Sending via model() (/sendmodel)
+
+=cut
+
+sub sendmodel :Path("sendmodel") :Args(0) {
+    my ( $self, $c ) = @_;
+
+    my $html = <<EOF;
+<!DOCTYPE html>
+<html>
+<head>
+<title>Email test</title>
+<style type="text/css">
+input { margin-bottom: 5px; }
+</style>
+</head>
+<body>
+<p>Enter your name/email address and click Send</p>
+
+<form method="POST" action="/sendmodel">
+<label for="name">Name</label> <input type="text" id="name" name="name" value=""><br>
+<label for="email">Email</label> <input type="email" id="email" name="email" value="" required><br>
+<input type="submit" value="Send!">
+</form>
+</body>
+</html>
+EOF
+
+    if (my $email = $c->request->params->{ email }) {
+
+        my $name = $c->request->params->{ name } || "anonymous";
+
+        # Send a test email
+
+        my $email = $c->model('Email')
+            ->template( "welcome", {
+                yourname => $name,
+                destination_email => $email,
+            })
+            ->to( $email )
+            ->from( '"Simon" <simon@example.com>' )
+            ->header('Reply-To', '"Simon" <simon@example.net>')
+            ->subject( "Test form submission" );
+        $email->send();
+
+        $html = "<pre>" . HTML::Entities::encode_entities($email->as_string) . "</pre>";
+    }
+    $c->response->body($html);
+}
+
 =head2 default
 
 Standard 404 error page
