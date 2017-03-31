@@ -6,7 +6,7 @@ use Email::MIME::Kit;
 use HTML::Entities;
 
 use Email::Sender::Simple;
-use Email::Sender::Transport::Test;
+use Email::Sender::Transport::Sendmail;
 
 BEGIN { extends 'Catalyst::Controller' }
 
@@ -38,12 +38,24 @@ sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
 
     my $html = <<EOF;
-<p>Enter your email address and click Send</p>
+<!DOCTYPE html>
+<html>
+<head>
+<title>Email test</title>
+<style type="text/css">
+input { margin-bottom: 5px; }
+</style>
+</head>
+<body>
+<p>Enter your name/email address and click Send</p>
 
 <form method="POST" action="/">
-<input type="text" name="email" value="">
+<label for="name">Name</label> <input type="text" id="name" name="name" value=""><br>
+<label for="email">Email</label> <input type="email" id="email" name="email" value="" required><br>
 <input type="submit" value="Send!">
 </form>
+</body>
+</html>
 EOF
 
     if (my $email = $c->request->params->{ email }) {

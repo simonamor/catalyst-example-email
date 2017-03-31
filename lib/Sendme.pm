@@ -41,7 +41,7 @@ __PACKAGE__->config(
     disable_component_resolution_regex_fallback => 1,
     enable_catalyst_header => 1, # Send X-Catalyst header
 
-    email_transport => 'Email::Sender::Transport::Test',
+    email_transport => 'Email::Sender::Transport::Sendmail',
 
 );
 
