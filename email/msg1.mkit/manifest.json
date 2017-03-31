@@ -2,7 +2,8 @@
     "renderer": "TT",
     "header": [
         { "From": "Simon <simon@example.com>" },
-        { "Subject": "Test form submission" }
+        { "Subject": "Test form submission" },
+        { "To": "[% destination_email %]" }
     ],
     "alternatives": [
         { "type": "text/plain", "path": "body.txt" },
