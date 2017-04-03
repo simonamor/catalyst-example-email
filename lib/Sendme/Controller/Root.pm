@@ -101,6 +101,44 @@ sub sendemail :Path("sendemail") :Args(0) {
     }
 }
 
+=head2 sendemkit
+
+Sending via model('EMKit') (/sendemkit)
+
+=cut
+
+sub sendemkit :Path("sendemkit") :Args(0) {
+    my ($self, $c) = @_;
+
+    $c->stash(
+        template => "form.html",
+        form_action => "/sendemkit",
+    );
+
+    if (my $email = $c->request->params->{ email }) {
+        my $name = $c->request->params->{ name } || "anonymous";
+
+        # Send a test email
+        my $email = $c->model('EMKit')
+            ->template( "msg1.mkit", {
+                yourname => $name,
+                destination_email => $email,
+            })
+            ->to( $email )
+            ->from( '"Simon" <simon@example.com>' )
+            ->header('Reply-To', '"Simon" <simon@example.net>')
+            ->subject( "Test form submission via EMKit" );
+
+        $c->log->debug( "Email:\n" . $email->as_string );
+
+#        $email->send();
+
+        $c->stash(
+            message => HTML::Entities::encode_entities($email->as_string)
+        );
+    }
+}
+
 
 =head2 default
 
