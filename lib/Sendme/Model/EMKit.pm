@@ -44,6 +44,12 @@ sub ACCEPT_CONTEXT {
         @args );
 }
 
+=head2 AUTOLOAD
+
+Any methods requested are passed through to Sendme::EMKit
+
+=cut
+
 sub AUTOLOAD {
     my $self = shift;
     my $name = $AUTOLOAD;

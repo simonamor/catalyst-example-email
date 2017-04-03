@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Email test for [% form_action %]</title>
+<style type="text/css">
+input { margin-bottom: 5px; }
+ul { padding-left: 0px; }
+ul li { list-style-type: none; display: inline; padding: 10px; margin: 6px; }
+ul li a { padding: 10px; border: 1px solid #999999; background: #eeeeee; }
+</style>
+</head>
+<body>
+<p>Enter your name/email address and click Send</p>
+<p>This form submits via [% form_action %]</p>
+
+<form method="POST" action="[% form_action %]">
+<label for="name">Name</label> <input type="text" id="name" name="name" value=""><br>
+<label for="email">Email</label> <input type="email" id="email" name="email" value="" required><br>
+<input type="submit" value="Send!">
+</form>
+
+<ul>
+<li><a href="/">Email::MIME::Kit</a></li>
+<li><a href="/sendemail">model(Email)</a></li>
+<li><a href="/sendemkit">model(EMKit)</a></li>
+</ul>
+
+</body>
+</html>

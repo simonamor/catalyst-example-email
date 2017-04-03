@@ -43,6 +43,7 @@ __PACKAGE__->config(
 
     email_transport => 'Email::Sender::Transport::Sendmail',
 
+    default_view => 'HTML',
 );
 
 # Start the application

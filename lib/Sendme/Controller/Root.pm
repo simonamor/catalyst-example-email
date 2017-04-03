@@ -12,7 +12,7 @@ BEGIN { extends 'Catalyst::Controller' }
 
 #
 # Sets the actions in this controller to be registered with no prefix
-# so they function identically to actions created in MyApp.pm
+# so they function identically to actions created in Sendme.pm
 #
 __PACKAGE__->config(namespace => '');
 
@@ -37,35 +37,17 @@ The root page (/)
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
 
-    my $html = <<EOF;
-<!DOCTYPE html>
-<html>
-<head>
-<title>Email test</title>
-<style type="text/css">
-input { margin-bottom: 5px; }
-</style>
-</head>
-<body>
-<p>Enter your name/email address and click Send</p>
-
-<form method="POST" action="/">
-<label for="name">Name</label> <input type="text" id="name" name="name" value=""><br>
-<label for="email">Email</label> <input type="email" id="email" name="email" value="" required><br>
-<input type="submit" value="Send!">
-</form>
-</body>
-</html>
-EOF
+    $c->stash(
+        template => "form.html",
+        form_action => "/",
+    );
 
     if (my $email = $c->request->params->{ email }) {
-
         my $name = $c->request->params->{ name } || "anonymous";
 
         # Send a test email
-
         my $kit = Email::MIME::Kit->new(
-            source => $c->path_to('email', 'msg1.mkit'),
+            source => $c->path_to('templates', 'emails', 'msg1.mkit'),
         );
         my $msg = $kit->assemble({
             yourname => $name,
@@ -78,47 +60,30 @@ EOF
             transport => $transport,
         });
 
-        $html = "<pre>" . HTML::Entities::encode_entities($msg->as_string) . "</pre>";
+        $c->stash(
+            message => HTML::Entities::encode_entities($msg->as_string)
+        );
     }
-    $c->response->body($html);
 }
 
-=head2 sendmodel
+=head2 sendemail
 
-Sending via model() (/sendmodel)
+Sending via model('Email') (/sendemail)
 
 =cut
 
-sub sendmodel :Path("sendmodel") :Args(0) {
+sub sendemail :Path("sendemail") :Args(0) {
     my ( $self, $c ) = @_;
 
-    my $html = <<EOF;
-<!DOCTYPE html>
-<html>
-<head>
-<title>Email test</title>
-<style type="text/css">
-input { margin-bottom: 5px; }
-</style>
-</head>
-<body>
-<p>Enter your name/email address and click Send</p>
-
-<form method="POST" action="/sendmodel">
-<label for="name">Name</label> <input type="text" id="name" name="name" value=""><br>
-<label for="email">Email</label> <input type="email" id="email" name="email" value="" required><br>
-<input type="submit" value="Send!">
-</form>
-</body>
-</html>
-EOF
+    $c->stash(
+        template => "form.html",
+        form_action => "/sendemail",
+    );
 
     if (my $email = $c->request->params->{ email }) {
-
         my $name = $c->request->params->{ name } || "anonymous";
 
         # Send a test email
-
         my $email = $c->model('Email')
             ->template( "welcome", {
                 yourname => $name,
@@ -127,13 +92,15 @@ EOF
             ->to( $email )
             ->from( '"Simon" <simon@example.com>' )
             ->header('Reply-To', '"Simon" <simon@example.net>')
-            ->subject( "Test form submission" );
+            ->subject( "Test form submission via Email" );
         $email->send();
 
-        $html = "<pre>" . HTML::Entities::encode_entities($email->as_string) . "</pre>";
+        $c->stash(
+            message => HTML::Entities::encode_entities($email->as_string)
+        );
     }
-    $c->response->body($html);
 }
+
 
 =head2 default
 
@@ -157,7 +124,7 @@ sub end : ActionClass('RenderView') {}
 
 =head1 AUTHOR
 
-Catalyst developer
+Simon Amor <simon@leaky.org>
 
 =head1 LICENSE
 
