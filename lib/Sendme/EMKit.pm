@@ -214,13 +214,13 @@ sub _emkit {
         return $self->{ _emkit };
     }
 
-    my $source = shift || $self->{ _source };
+    my $source = shift || $self->source;
     my $tpath = $self->{ _template_path } || ".";
 
     die "Cannot create EMKit without a source" unless ($source);
 
     $self->{ _emkit } = Email::MIME::Kit->new({
-        source => "$tpath/emails/$source"
+        source => "$tpath/$source"
     });
 
     # If the source kit doesn't exist, the following code will never
