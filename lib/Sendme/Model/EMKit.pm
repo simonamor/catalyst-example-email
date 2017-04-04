@@ -57,5 +57,15 @@ sub AUTOLOAD {
     $self->EmailInstance->$name(@_);
 }
 
-1;
+=head1 AUTHOR
 
+Simon Amor <simon@leaky.org>
+
+=head1 LICENSE
+
+This library is free software. You can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut
+
+1;
