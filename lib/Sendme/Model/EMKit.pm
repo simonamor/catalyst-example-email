@@ -40,7 +40,7 @@ object that hasn't already been referenced.
 sub ACCEPT_CONTEXT {
     my ($self, $c, @args) = @_;
     return Sendme::EMKit->new(
-        { template_path => $c->path_to('templates')->stringify },
+        template_path => $c->path_to('templates')->stringify,
         @args );
 }
 

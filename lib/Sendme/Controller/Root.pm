@@ -119,7 +119,9 @@ sub sendemkit :Path("sendemkit") :Args(0) {
         my $name = $c->request->params->{ name } || "anonymous";
 
         # Send a test email
-        my $email = $c->model('EMKit')
+        my $emkit = $c->model('EMKit',
+                transport_class => 'Email::Sender::Transport::Sendmail',
+            )
             ->template( "msg1.mkit", {
                 yourname => $name,
                 destination_email => $email,
@@ -129,12 +131,12 @@ sub sendemkit :Path("sendemkit") :Args(0) {
             ->header('Reply-To', '"Simon" <simon@example.net>')
             ->subject( "Test form submission via EMKit" );
 
-        $c->log->debug( "Email:\n" . $email->as_string );
+        $c->log->debug( "Email:\n" . $emkit->_email->as_string );
 
-#        $email->send();
+        $emkit->send();
 
         $c->stash(
-            message => HTML::Entities::encode_entities($email->as_string)
+            message => HTML::Entities::encode_entities($emkit->_email->as_string)
         );
     }
 }

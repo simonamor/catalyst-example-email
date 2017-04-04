@@ -44,7 +44,7 @@ Returns $self (obviously)
 
 sub new {
     my $class = shift;
-    my $extra_args = shift || {};
+    my $extra_args = @_ && ref($_[0]) eq 'HASH' ? shift : { @_ };
 
     # Default class doesn't actually send mail
     my $self = {
