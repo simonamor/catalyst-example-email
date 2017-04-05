@@ -20,6 +20,7 @@ requires 'Config::General'; # This should reflect the config file format you've 
 
 requires 'Email::MIME::Kit';
 requires 'Email::MIME::Kit::Renderer::TT';
+requires 'Email::Sender::Simple';
 requires 'HTML::Entities';
 
 test_requires 'Test::More' => '0.88';
